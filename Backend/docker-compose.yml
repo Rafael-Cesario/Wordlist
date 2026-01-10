@@ -1,0 +1,16 @@
+services:
+  database:
+    image: postgres:18-alpine
+    container_name: wordlist
+    restart: always
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: wordlist
+    ports:
+      - 5432:5432
+    volumes:
+      - ./database/postgres:/var/lib/postgresql
+
+volumes:
+  database:
