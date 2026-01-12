@@ -7,3 +7,5 @@ const authService = new AuthService();
 const authController = new AuthController(authService);
 
 router.post("/", (req: Request, res: Response) => authController.login(req, res));
+
+export { router as authRouter };
