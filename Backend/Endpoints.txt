@@ -1,0 +1,4 @@
+Create User > POST "/user"
+Req: { email: string; name: string; password: string }
+Res: { id: string, email: string, name: string, createdAt: Date }
+

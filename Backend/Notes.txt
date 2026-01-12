@@ -1,0 +1,5 @@
+Wordlist
+
+- Typescript, Express, Prisma, Postgres + docker compose, dotenv
+- User Router, controller, service
+x Create User + Tests
