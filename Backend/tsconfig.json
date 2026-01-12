@@ -4,7 +4,7 @@
     "moduleResolution": "node",
     "target": "ES2023",
     "esModuleInterop": true,
-    "types": ["node"],
+    "types": ["node", "vitest/globals"],
     "sourceMap": true,
     "declaration": true,
     "declarationMap": true,
