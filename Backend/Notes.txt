@@ -2,4 +2,5 @@ Wordlist
 
 - Typescript, Express, Prisma, Postgres + docker compose, dotenv
 - User Router, controller, service
+- ErrorMiddleware
 x Create User + Tests
