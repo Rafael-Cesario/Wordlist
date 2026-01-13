@@ -1,8 +1,10 @@
 # 📖 WordList
 
-> A solução para quem está estudando um idioma, mas acaba esquecendo de revisar.
+> A solução para quem está estudando um idioma.
 
-Sabe quando você tá aprendendo um idioma e acaba com uma lista gigante de palavras que nunca revisa? O **Wordlist** resolve isso. Ele organiza seu vocabulário em pastas temáticas e, o mais importante: **quebra o conteúdo em blocos menores automaticamente**. Assim, você foca em poucas palavras por vez e só avança quando estiver confiante.
+Sabe quando você tá aprendendo um idioma e acaba com uma lista gigante de palavras que nunca revisa? O **Wordlist** resolve isso. 
+
+WordList organiza listas extensas de vocabulário em pastas temáticas e blocos automáticos, permitindo estudar poucas palavras por vez com mais consistência.
 
 ---
 
