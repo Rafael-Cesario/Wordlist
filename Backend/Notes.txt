@@ -4,6 +4,6 @@ Wordlist
 - User Router, controller, service
 - ErrorMiddleware
 - Create User + Tests
-x Auth Router, controller, service
-x JWT
-x Login + Tests
+- Auth Router, controller, service
+- JWT + Cookies
+- Login + Tests

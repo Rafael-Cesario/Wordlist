@@ -11,3 +11,9 @@ export const generateToken = (id: string) => {
 
   return token;
 };
+
+export const validateToken = (token: string) => {
+  const secret = `${process.env["JWT_SECRET"]}`;
+  const isValid = jwt.verify(token, secret);
+  return !!isValid;
+};

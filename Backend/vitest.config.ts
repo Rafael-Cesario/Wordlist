@@ -5,5 +5,6 @@ export default defineConfig({
     watch: true,
     globals: true,
     isolate: true,
+    fileParallelism: false
   },
 });
