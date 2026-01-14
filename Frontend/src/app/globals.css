@@ -1,0 +1,30 @@
+@import "tailwindcss";
+
+:root {
+  --background: #111111;
+  --foreground: #dddddd;
+}
+
+@theme {
+  --color-background: #111111;
+  --color-faded: #222222;
+  --color-foreground: #dddddd;
+  --color-royal-blue: #2563eb;
+  --color-red: #ef4444;
+  --color-amber: #facc15;
+  --color-moss: #4d7c0f;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+button {
+  cursor: pointer;
+}
+
+input {
+  outline:none;
+}
