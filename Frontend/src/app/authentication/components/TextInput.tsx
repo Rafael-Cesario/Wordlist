@@ -10,7 +10,7 @@ interface TextInputProps {
 
 export const TextInput = ({ props: { title, error, fieldName, value, changeValue } }: TextInputProps) => {
   return (
-    <div className="flex flex-col mb-4 w-100">
+    <div className="flex flex-col mb-8 w-100">
       <label className="ml-4 text-sm text-neutral-400" htmlFor={fieldName}>
         {title}
       </label>
@@ -24,7 +24,7 @@ export const TextInput = ({ props: { title, error, fieldName, value, changeValue
         onChange={(e) => changeValue(e.target.value)}
       />
 
-      <p className="text-red px-4 mt-1">{error}</p>
+      <p className="text-red px-4 mt-1 h-1">{error}</p>
     </div>
   );
 };

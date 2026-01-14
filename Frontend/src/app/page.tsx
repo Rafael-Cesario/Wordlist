@@ -1,15 +1,19 @@
 "use client";
 
 import { useState } from "react";
-import { TextInput } from "./components/TextInput";
+import { TextInput } from "./authentication/components/TextInput";
 import { produce } from "immer";
+import { validateFields } from "./authentication/utils/ValidateFields";
 
 export default function Home() {
   const defaultUser = { email: "", name: "", password: "", passwordCheck: "" };
+
   const [user, setUser] = useState(defaultUser);
+  const [errors, setErrors] = useState(defaultUser);
 
   const createUser = () => {
-    console.log({ user });
+    const { hasError, fieldErrors } = validateFields.createUser(user);
+    if (hasError) return setErrors(fieldErrors);
   };
 
   const changeValue = (field: keyof typeof defaultUser, newValue: string) => {
@@ -35,7 +39,7 @@ export default function Home() {
             props={{
               title: "Email",
               fieldName: "email",
-              error: "Este email já esta em uso",
+              error: errors.email,
               value: user.email,
               changeValue: (value) => changeValue("email", value),
             }}
@@ -45,7 +49,7 @@ export default function Home() {
             props={{
               title: "Nome",
               fieldName: "name",
-              error: "Este email já esta em uso",
+              error: errors.name,
               value: user.name,
               changeValue: (value) => changeValue("name", value),
             }}
@@ -55,7 +59,7 @@ export default function Home() {
             props={{
               title: "Senha",
               fieldName: "password",
-              error: "Este email já esta em uso",
+              error: errors.password,
               value: user.password,
               changeValue: (value) => changeValue("password", value),
             }}
@@ -65,13 +69,15 @@ export default function Home() {
             props={{
               title: "Confirmar Senha",
               fieldName: "passwordCheck",
-              error: "Este email já esta em uso",
+              error: errors.passwordCheck,
               value: user.passwordCheck,
               changeValue: (value) => changeValue("passwordCheck", value),
             }}
           />
 
-          <button className="bg-royal-blue w-100 rounded-xs px-4 py-2 mt-4">Confirmar</button>
+          <button className="bg-royal-blue w-100 rounded-xs px-4 py-2 mt-4 font-bold text-neutral-100">
+            Confirmar
+          </button>
         </form>
       </main>
     </>
