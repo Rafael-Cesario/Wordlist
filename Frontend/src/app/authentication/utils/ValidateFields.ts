@@ -1,9 +1,4 @@
-interface CreateUser {
-  email: string;
-  name: string;
-  password: string;
-  passwordCheck: string;
-}
+import { CreateUser } from "@/interfaces/userInterface";
 
 // from Zod
 const REGEX_EMAIL = /^(?!\.)(?!.*\.\.)([a-z0-9_'+\-\.]*)[a-z0-9_+-]@([a-z0-9][a-z0-9\-]*\.)+[a-z]{2,}$/i;
@@ -23,11 +18,16 @@ class ValidateFields {
 
   private password(password: string) {
     if (!password) return "Este campo é obrigatório";
+    if (password.length < 8) return "Sua senha é muito curta, mínimo 8 caracteres";
+    if (!/[a-z]/.test(password)) return "A senha deve conter uma letra minúscula";
+    if (!/[A-Z]/.test(password)) return "A senha deve conter uma letra maiúscula";
+    if (!/[0-9]/.test(password)) return "A senha deve conter um número";
     return "";
   }
 
-  private passwordCheck(passwordCheck: string) {
+  private passwordCheck(passwordCheck: string, password: string) {
     if (!passwordCheck) return "Este campo é obrigatório";
+    if (passwordCheck !== password) return "Suas senhas precisam ser iguais";
     return "";
   }
 
@@ -36,7 +36,7 @@ class ValidateFields {
       email: this.email(user.email),
       name: this.name(user.name),
       password: this.password(user.password),
-      passwordCheck: this.passwordCheck(user.passwordCheck),
+      passwordCheck: this.passwordCheck(user.passwordCheck, user.password),
     };
 
     const hasError = Object.values(fieldErrors).some((value) => value.length > 0);
