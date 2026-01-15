@@ -4,6 +4,7 @@ import { useState } from "react";
 import { TextInput } from "./authentication/components/TextInput";
 import { produce } from "immer";
 import { validateFields } from "./authentication/utils/ValidateFields";
+import { userRequests } from "@/requests/UserRequests";
 
 export default function Home() {
   const defaultUser = { email: "", name: "", password: "", passwordCheck: "" };
@@ -11,9 +12,22 @@ export default function Home() {
   const [user, setUser] = useState(defaultUser);
   const [errors, setErrors] = useState(defaultUser);
 
-  const createUser = () => {
+  const createUser = async () => {
     const { hasError, fieldErrors } = validateFields.createUser(user);
     if (hasError) return setErrors(fieldErrors);
+
+    setErrors(defaultUser);
+
+    const { data, error } = await userRequests.create(user);
+
+    if (error) return console.log(error);
+
+    localStorage.setItem("user", JSON.stringify(data));
+
+    // Tasks:
+    // send error notification
+    // send success notification
+    // send user to login page
   };
 
   const changeValue = (field: keyof typeof defaultUser, newValue: string) => {
