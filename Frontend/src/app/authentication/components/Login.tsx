@@ -6,13 +6,18 @@ import { produce } from "immer";
 import { PasswordInput } from "./PasswordInput";
 import { validateFields } from "../utils/ValidateFields";
 import { authRequests } from "@/requests/AuthRequests";
+import { Notification } from "./Notification";
+import { INotification } from "@/app/page";
+import { useRouter } from "next/navigation";
 
 export const Login = () => {
   const defaultUser = { email: "", password: "" };
+  const router = useRouter();
 
   const [user, setUser] = useState(defaultUser);
   const [errors, setErrors] = useState(defaultUser);
   const [hidePassword, setHidePassword] = useState(true);
+  const [notification, setNotification] = useState<INotification>({ message: "", type: "success", open: false });
 
   const changeValue = (field: keyof typeof defaultUser, value: string) => {
     const state = produce(user, (draft) => {
@@ -28,17 +33,20 @@ export const Login = () => {
 
     setErrors(defaultUser);
 
-    const { data, error } = await authRequests.login(user);
+    const { error } = await authRequests.login(user);
 
     if (error) {
-      console.log(error);
+      setNotification({ type: "error", open: true, message: error });
+      return;
     }
 
-    console.log(data);
+    router.push("/folders");
   };
 
   return (
     <main className="flex flex-col mt-20">
+      <Notification props={{ notification, setNotification }} />
+
       <h1 className="text-center text-3xl font-bold">Entrar</h1>
       <p className="text-center text-neutral-400">Preencha seus dados para entrar</p>
 

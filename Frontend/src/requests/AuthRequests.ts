@@ -18,7 +18,7 @@ class AuthRequests {
 
   async login(user: Login) {
     try {
-      const { data } = await axios.post(this.URL, user);
+      const { data } = await axios.post(this.URL, user, { withCredentials: true });
       return { data };
     } catch (error) {
       return { error: this.handleAxiosError(error) };
