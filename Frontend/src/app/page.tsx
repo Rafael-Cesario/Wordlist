@@ -6,6 +6,7 @@ import { produce } from "immer";
 import { validateFields } from "./authentication/utils/ValidateFields";
 import { userRequests } from "@/requests/UserRequests";
 import { Notification } from "./authentication/components/Notification";
+import { PasswordInput } from "./authentication/components/PasswordInput";
 
 export interface INotification {
   type: "error" | "success";
@@ -19,6 +20,7 @@ export default function Home() {
   const [user, setUser] = useState(defaultUser);
   const [errors, setErrors] = useState(defaultUser);
   const [notification, setNotification] = useState<INotification>({ message: "", type: "success", open: false });
+  const [hidePassword, setHidePassword] = useState(true);
 
   const createUser = async () => {
     const { hasError, fieldErrors } = validateFields.createUser(user);
@@ -37,8 +39,6 @@ export default function Home() {
 
     // Tasks:
     // send user to login page
-    // button loading
-    // show and hide password field
   };
 
   const changeValue = (field: keyof typeof defaultUser, newValue: string) => {
@@ -82,23 +82,27 @@ export default function Home() {
             }}
           />
 
-          <TextInput
+          <PasswordInput
             props={{
               title: "Senha",
               fieldName: "password",
               error: errors.password,
               value: user.password,
               changeValue: (value) => changeValue("password", value),
+              hidePassword,
+              setHidePassword,
             }}
           />
 
-          <TextInput
+          <PasswordInput
             props={{
               title: "Confirmar Senha",
               fieldName: "passwordCheck",
               error: errors.passwordCheck,
               value: user.passwordCheck,
               changeValue: (value) => changeValue("passwordCheck", value),
+              hidePassword,
+              setHidePassword,
             }}
           />
 
