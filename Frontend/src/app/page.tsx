@@ -5,12 +5,20 @@ import { TextInput } from "./authentication/components/TextInput";
 import { produce } from "immer";
 import { validateFields } from "./authentication/utils/ValidateFields";
 import { userRequests } from "@/requests/UserRequests";
+import { Notification } from "./authentication/components/Notification";
+
+export interface INotification {
+  type: "error" | "success";
+  message: string;
+  open: boolean;
+}
 
 export default function Home() {
   const defaultUser = { email: "", name: "", password: "", passwordCheck: "" };
 
   const [user, setUser] = useState(defaultUser);
   const [errors, setErrors] = useState(defaultUser);
+  const [notification, setNotification] = useState<INotification>({ message: "", type: "success", open: false });
 
   const createUser = async () => {
     const { hasError, fieldErrors } = validateFields.createUser(user);
@@ -20,14 +28,17 @@ export default function Home() {
 
     const { data, error } = await userRequests.create(user);
 
-    if (error) return console.log(error);
+    if (error) {
+      setNotification({ message: error, type: "error", open: true });
+      return;
+    }
 
     localStorage.setItem("user", JSON.stringify(data));
 
     // Tasks:
-    // send error notification
-    // send success notification
     // send user to login page
+    // button loading
+    // show and hide password field
   };
 
   const changeValue = (field: keyof typeof defaultUser, newValue: string) => {
@@ -45,6 +56,8 @@ export default function Home() {
       </header>
 
       <main className="flex flex-col mt-20">
+        <Notification props={{ notification, setNotification }} />
+
         <h1 className="text-center text-3xl font-bold">Criar Conta</h1>
         <p className="text-center text-neutral-400">Preencha os dados abaixo para criar sua conta</p>
 
