@@ -5,6 +5,7 @@ import { TextInput } from "./TextInput";
 import { produce } from "immer";
 import { PasswordInput } from "./PasswordInput";
 import { validateFields } from "../utils/ValidateFields";
+import { authRequests } from "@/requests/AuthRequests";
 
 export const Login = () => {
   const defaultUser = { email: "", password: "" };
@@ -21,15 +22,19 @@ export const Login = () => {
     setUser(state);
   };
 
-  const login = () => {
-    console.log({ user });
-
-
+  const login = async () => {
     const { hasError, fieldErrors } = validateFields.login(user);
     if (hasError) return setErrors(fieldErrors);
 
+    setErrors(defaultUser);
 
+    const { data, error } = await authRequests.login(user);
 
+    if (error) {
+      console.log(error);
+    }
+
+    console.log(data);
   };
 
   return (

@@ -1,22 +1,22 @@
 import axios, { AxiosError } from "axios";
-import { CreateUser } from "@/interfaces/userInterface";
-import { USER_ERRORS } from "./errors/userErrors";
+import { AUTH_ERRORS } from "./errors/authErrors";
+import { Login } from "@/interfaces/userInterface";
 
-class UserRequests {
-  private URL = `${process.env.NEXT_PUBLIC_URL}/user`;
+class AuthRequests {
+  private URL = `${process.env.NEXT_PUBLIC_URL}/auth`;
 
   private handleAxiosError(error: unknown) {
     if (error instanceof AxiosError) {
       const responseError = error.response?.data?.error;
       const errorCode = responseError.split(":")[0];
-      const message = USER_ERRORS[errorCode as keyof typeof USER_ERRORS];
+      const message = AUTH_ERRORS[errorCode as keyof typeof AUTH_ERRORS];
       return message;
     }
 
-    return USER_ERRORS.default;
+    return AUTH_ERRORS.default;
   }
 
-  async create(user: CreateUser) {
+  async login(user: Login) {
     try {
       const { data } = await axios.post(this.URL, user);
       return { data };
@@ -26,4 +26,4 @@ class UserRequests {
   }
 }
 
-export const userRequests = new UserRequests();
+export const authRequests = new AuthRequests();
