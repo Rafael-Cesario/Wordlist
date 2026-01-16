@@ -1,4 +1,4 @@
-import { CreateUser } from "@/interfaces/userInterface";
+import { CreateUser, Login } from "@/interfaces/userInterface";
 
 // from Zod
 const REGEX_EMAIL = /^(?!\.)(?!.*\.\.)([a-z0-9_'+\-\.]*)[a-z0-9_+-]@([a-z0-9][a-z0-9\-]*\.)+[a-z]{2,}$/i;
@@ -31,6 +31,15 @@ class ValidateFields {
     return "";
   }
 
+  private validateEmptyField = (field: string) => {
+    if (!field) return "Este campo é obrigatório";
+    return "";
+  };
+
+  private hasError = (errors: Record<string, string>) => {
+    return Object.values(errors).some((value) => value.length > 0);
+  };
+
   createUser(user: CreateUser) {
     const fieldErrors = {
       email: this.email(user.email),
@@ -39,7 +48,18 @@ class ValidateFields {
       passwordCheck: this.passwordCheck(user.passwordCheck, user.password),
     };
 
-    const hasError = Object.values(fieldErrors).some((value) => value.length > 0);
+    const hasError = this.hasError(fieldErrors);
+
+    return { hasError, fieldErrors };
+  }
+
+  login(user: Login) {
+    const fieldErrors = {
+      email: this.email(user.email),
+      password: this.validateEmptyField(user.password),
+    };
+
+    const hasError = this.hasError(fieldErrors);
 
     return { hasError, fieldErrors };
   }

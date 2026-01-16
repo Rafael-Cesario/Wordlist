@@ -4,3 +4,8 @@ export interface CreateUser {
   password: string;
   passwordCheck: string;
 }
+
+export interface Login {
+  email: string;
+  password: string;
+}
