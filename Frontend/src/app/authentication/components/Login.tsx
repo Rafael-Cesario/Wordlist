@@ -40,7 +40,7 @@ export const Login = () => {
       return;
     }
 
-    router.push("/folders");
+    router.push("/home");
   };
 
   return (

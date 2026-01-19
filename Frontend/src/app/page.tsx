@@ -10,7 +10,7 @@ export interface INotification {
   open: boolean;
 }
 
-export default function Home() {
+export default function Authentication() {
   const [activeForm, setActiveForm] = useState<"login" | "create">("login");
 
   const changeForm = () => {
