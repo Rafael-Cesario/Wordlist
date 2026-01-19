@@ -7,5 +7,9 @@ export class FolderService {
   async create(data: CreateFolder) {
     const haveUser = await prisma.user.findUnique({ where: { id: data.userId } });
     if (!haveUser) throw new CustomError(USER_ERRORS.notFound);
+
+    const folder = await prisma.folder.create({ data });
+
+    return folder;
   }
 }

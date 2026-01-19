@@ -10,7 +10,6 @@ export class FolderController {
     const folderData = folderSchema.parse(req.body);
 
     const folder = await this.folderService.create(folderData);
-
-    console.log("Folder controller");
+    res.status(201).json(folder);
   }
 }
