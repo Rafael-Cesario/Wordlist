@@ -12,7 +12,7 @@ export const errorMiddleware = (error: Error, req: Request, res: Response, _next
   }
 
   if (error instanceof CustomError) {
-    return res.status(400).json({ error: error.message });
+    return res.status(400).json({ error: { code: error.code, message: error.message } });
   }
 
   return res.status(500).json({ error: "Internal server error." });

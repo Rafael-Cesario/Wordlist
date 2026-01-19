@@ -1,7 +1,7 @@
 import request from "supertest";
 import type { Login } from "../interfaces/authInterface";
 import { app } from "../app";
-import { AUTH_ERRORS } from "../helpers/CustomError";
+import { AUTH_ERRORS } from "../helpers/errors/authErrors";
 import { prisma } from "../prisma";
 import { hashPassword } from "../helpers/hashPassword";
 import { validateToken } from "../helpers/token";
@@ -47,13 +47,13 @@ describe("Auth Service", () => {
     it("Should fail if didn't found the user", async () => {
       const res = await login({ email: "notfound@email.com", password: "123" });
 
-      expect(res.body.error).toBe(AUTH_ERRORS.invalidCredentials);
+      expect(res.body.error).toStrictEqual(AUTH_ERRORS.invalidCredentials);
     });
 
     it("Should fail if password is wrong", async () => {
       const res = await login({ email: user.email, password: "wrong" });
 
-      expect(res.body.error).toBe(AUTH_ERRORS.invalidCredentials);
+      expect(res.body.error).toStrictEqual(AUTH_ERRORS.invalidCredentials);
     });
 
     it("Should create an authentication cookie", async () => {

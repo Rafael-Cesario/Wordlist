@@ -2,7 +2,7 @@ import request from "supertest";
 import { app } from "../app";
 import type { CreateUser } from "../interfaces/userInterface";
 import { prisma } from "../prisma";
-import { USER_ERRORS } from "../helpers/CustomError";
+import { USER_ERRORS } from "../helpers/errors/userErrors";
 
 describe("User", () => {
   describe("Create User", () => {
@@ -68,7 +68,7 @@ describe("User", () => {
       const res = await createUser(user);
 
       expect(res.status).toBe(400);
-      expect(res.body.error).toBe(USER_ERRORS.uniqueConstraint);
+      expect(res.body.error).toStrictEqual(USER_ERRORS.uniqueConstraint);
     });
 
     it("Should remove password from the response", async () => {

@@ -1,4 +1,5 @@
-import { AUTH_ERRORS, CustomError } from "../helpers/CustomError";
+import { AUTH_ERRORS } from "../helpers/errors/authErrors";
+import { CustomError } from "../helpers/CustomError";
 import { verifyPassword } from "../helpers/hashPassword";
 import { generateToken } from "../helpers/token";
 import type { Login } from "../interfaces/authInterface";

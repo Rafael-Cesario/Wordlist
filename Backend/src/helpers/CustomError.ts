@@ -1,13 +1,13 @@
-export class CustomError extends Error {
-  constructor(message: string) {
-    super(message);
-  }
+export interface ICustomError {
+  code: string;
+  message: string;
 }
 
-export const USER_ERRORS = {
-  uniqueConstraint: "U100: Unique constraint failed on the field email",
-};
+export class CustomError extends Error {
+  readonly code: string;
 
-export const AUTH_ERRORS = {
-  invalidCredentials: "A100: Invalid credentials, the email or password provided are incorrect.",
-};
+  constructor({ code, message }: ICustomError) {
+    super(message);
+    this.code = code;
+  }
+}

@@ -1,5 +1,6 @@
 import { prisma } from "../prisma";
-import { CustomError, USER_ERRORS } from "../helpers/CustomError";
+import { CustomError } from "../helpers/CustomError";
+import { USER_ERRORS } from "../helpers/errors/userErrors";
 import type { CreateUser } from "../interfaces/userInterface";
 
 export class UserService {
