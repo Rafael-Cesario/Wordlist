@@ -10,7 +10,7 @@ app.use(json());
 app.use(cors({ origin: true, credentials: true }));
 
 app.use("/user", userRouter);
-app.use("/auth", authRouter)
+app.use("/auth", authRouter);
 
 app.use(errorMiddleware);
 
