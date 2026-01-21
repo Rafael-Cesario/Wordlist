@@ -12,6 +12,7 @@
     "test": "vitest"
   },
   "devDependencies": {
+    "@types/cookie-parser": "^1.4.10",
     "@types/cors": "^2.8.19",
     "@types/dotenv": "^6.1.1",
     "@types/express": "^5.0.6",
@@ -20,7 +21,7 @@
     "@types/pg": "^8.16.0",
     "@types/supertest": "^6.0.3",
     "cross-env": "^10.1.0",
-    "prisma": "^7.2.0",
+    "prisma": "^6.19.2",
     "tsx": "^4.21.0",
     "typescript": "^5.9.3",
     "vitest": "^4.0.17"
@@ -30,6 +31,7 @@
     "@prisma/client": "^7.2.0",
     "@types/bcrypt": "^6.0.0",
     "bcrypt": "^6.0.0",
+    "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
     "dotenv": "^17.2.3",
     "express": "^5.2.1",
