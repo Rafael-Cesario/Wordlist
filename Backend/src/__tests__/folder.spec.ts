@@ -1,14 +1,19 @@
 import request from "supertest";
+import jwt from "jsonwebtoken";
 import type { CreateFolder } from "../interfaces/folderInterface";
 import type { User } from "../interfaces/userInterface";
 import { randomUUID } from "node:crypto";
 import { app } from "../app";
 import { USER_ERRORS } from "../helpers/errors/userErrors";
 import { prisma } from "../prisma";
+import { generateToken } from "../helpers/token";
+import { AUTH_ERRORS } from "../helpers/errors/authErrors";
 
 describe("Folder Route", () => {
   describe("Create Folder", () => {
     let user: User;
+    const route = "/folder";
+    const token = generateToken("123");
 
     beforeAll(async () => {
       user = await prisma.user.create({
@@ -29,8 +34,11 @@ describe("Folder Route", () => {
     });
 
     const createFolder = async (data: Partial<CreateFolder>) => {
-      const route = "/folder";
-      const res = await request(app).post(route).send(data);
+      const res = await request(app)
+        .post(route)
+        .set("Cookie", [`authentication=${token}`])
+        .send(data);
+
       return res;
     };
 
@@ -54,6 +62,25 @@ describe("Folder Route", () => {
 
       expect(res.status).toBe(400);
       expect(res.body.error).toStrictEqual(USER_ERRORS.notFound);
+    });
+
+    it("Should fail if auth cookies are not found", async () => {
+      const res = await request(app).post(route).send({});
+
+      expect(res.status).toBe(400);
+      expect(res.body.error).toStrictEqual(AUTH_ERRORS.cookiesNotFound);
+    });
+
+    it("Should fail if token is not valid", async () => {
+      const notValidToken = jwt.sign({}, "invalid");
+
+      const res = await request(app)
+        .post(route)
+        .set("Cookie", [`authentication=${notValidToken}`])
+        .send({});
+
+      expect(res.status).toBe(403);
+      expect(res.body.error).toStrictEqual(AUTH_ERRORS.invalidSignature);
     });
 
     it("Should save on database", async () => {
