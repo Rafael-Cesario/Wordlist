@@ -1,9 +1,0 @@
-Wordlist
-
-- Typescript, Express, Prisma, Postgres + docker compose, dotenv
-- User Router, controller, service
-- ErrorMiddleware
-- Create User + Tests
-- Auth Router, controller, service
-- JWT + Cookies
-- Login + Tests
