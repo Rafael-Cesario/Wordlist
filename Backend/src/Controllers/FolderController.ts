@@ -12,4 +12,11 @@ export class FolderController {
     const folder = await this.folderService.create(folderData);
     res.status(201).json(folder);
   }
+
+  async readAll(req: Request, res: Response) {
+    const userId = `${req.params.id}`;
+    const folders = await this.folderService.readAll(userId);
+
+    res.status(200).json({ userId, totalFolders: folders.length, folders });
+  }
 }

@@ -12,4 +12,12 @@ export class FolderService {
 
     return folder;
   }
+
+  async readAll(userId: string) {
+    const haveUser = await prisma.user.findUnique({ where: { id: userId }});
+    if (!haveUser) throw new CustomError(USER_ERRORS.notFound);
+
+    const folders = await prisma.folder.findMany({ where: { userId }});
+    return folders;
+  }
 }
