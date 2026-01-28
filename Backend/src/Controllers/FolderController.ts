@@ -6,8 +6,8 @@ export class FolderController {
   constructor(private folderService: FolderService) {}
 
   async create(req: Request, res: Response) {
-    const folderSchema = z.object({ name: z.string().min(1).toLowerCase(), userId: z.uuid() });
-    const folderData = folderSchema.parse(req.body);
+    const FolderSchema = z.object({ name: z.string().min(1).toLowerCase(), userId: z.uuid() });
+    const folderData = FolderSchema.parse(req.body);
 
     const folder = await this.folderService.create(folderData);
     res.status(201).json(folder);
@@ -18,5 +18,19 @@ export class FolderController {
     const folders = await this.folderService.readAll(userId);
 
     res.status(200).json({ userId, totalFolders: folders.length, folders });
+  }
+
+  async update(req: Request, res: Response) {
+    const FolderSchema = z.object({
+      id: z.uuid(),
+      userId: z.uuid(),
+      name: z.string().min(1).toLowerCase(),
+    });
+
+    const folderData = FolderSchema.parse(req.body);
+
+    const folder = await this.folderService.update(folderData);
+
+    res.status(200).json(folder);
   }
 }
