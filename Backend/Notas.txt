@@ -1,0 +1,12 @@
+Title: wordlist_backend
+Date: 05.01.2026
+Stack: Typescript, express, prisma, docker, postgres, jwt, bcrypt, vitest, supertest
+
+# Features
+
+- Create User
+- Login
+- Authentication, authorization
+- Cookies
+- Error Middleware
+- Tests
