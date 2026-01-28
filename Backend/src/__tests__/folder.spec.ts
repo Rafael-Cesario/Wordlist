@@ -10,37 +10,40 @@ import { generateToken } from "../helpers/token";
 import { AUTH_ERRORS } from "../helpers/errors/authErrors";
 
 describe("Folder Route", () => {
+  const route = "/folder";
+  const token = generateToken("123");
+  let user: User;
+
+  beforeAll(async () => {
+    const data = { email: "user01@email.com", name: "user01", password: "123" };
+    user = await prisma.user.create({ data });
+  });
+
+  afterAll(async () => {
+    await prisma.user.deleteMany({});
+  });
+
+  const createFolder = async (data: Partial<CreateFolder>) => {
+    const res = await request(app)
+      .post(route)
+      .set("Cookie", [`authentication=${token}`])
+      .send(data);
+
+    return res;
+  };
+
+  const readAllFolder = async (userId: string) => {
+    const res = await request(app)
+      .get(`${route}/${userId}`)
+      .set("Cookie", [`authentication=${token}`]);
+
+    return res;
+  };
+
   describe("Create Folder", () => {
-    let user: User;
-    const route = "/folder";
-    const token = generateToken("123");
-
-    beforeAll(async () => {
-      user = await prisma.user.create({
-        data: {
-          email: "user01@email.com",
-          name: "user01",
-          password: "123",
-        },
-      });
-    });
-
     afterEach(async () => {
       await prisma.folder.deleteMany({});
     });
-
-    afterAll(async () => {
-      await prisma.user.deleteMany({});
-    });
-
-    const createFolder = async (data: Partial<CreateFolder>) => {
-      const res = await request(app)
-        .post(route)
-        .set("Cookie", [`authentication=${token}`])
-        .send(data);
-
-      return res;
-    };
 
     it("Should fail if request body is empty", async () => {
       const res = await createFolder({});
@@ -104,6 +107,27 @@ describe("Folder Route", () => {
 
       expect(res.status).toBe(201);
       expect(res.body).toMatchObject({ id: expect.any(String), ...folder });
+    });
+  });
+
+  describe("Real all", () => {
+    it("Should fail if user does not exist", async () => {
+      const res = await readAllFolder("123");
+
+      expect(res.body.error).toStrictEqual(USER_ERRORS.notFound);
+    });
+
+    it("Should return all user's folder", async () => {
+      const folder = { name: "folder 01", userId: user.id };
+
+      await createFolder(folder);
+      const res = await readAllFolder(user.id);
+
+      expect(res.body.userId).toBe(user.id);
+      expect(res.body.totalFolders).toBe(1);
+      expect(res.body.folders).toHaveLength(1);
+      expect(res.body.folders[0].name).toBe(folder.name);
+      expect(res.status).toBe(200);
     });
   });
 });
