@@ -33,4 +33,12 @@ export class FolderController {
 
     res.status(200).json(folder);
   }
+
+  async delete(req: Request, res: Response) {
+    const folderId = `${req.params.id}`;
+    
+    await this.folderService.delete(folderId);
+
+    res.status(200).json({ folderId, message: "Folder deleted." });
+  }
 }

@@ -36,4 +36,11 @@ export class FolderService {
 
     return folder;
   }
+
+  async delete(id: string) {
+    const hasFolder = await prisma.folder.findUnique({ where: { id } });
+    if (!hasFolder) throw new CustomError(FOLDER_ERRORS.notFound);
+
+    await prisma.folder.delete({ where: { id }});
+  }
 }

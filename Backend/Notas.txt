@@ -4,9 +4,10 @@ Stack: Typescript, express, prisma, docker, postgres, jwt, bcrypt, vitest, super
 
 # Features
 
-- Create User
-- Login
+- User CRUD
+- Login, logout
 - Authentication, authorization
-- Cookies
 - Error Middleware
+- Cookies
 - Tests
+- Folder CRUD
