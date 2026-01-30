@@ -50,6 +50,14 @@ describe("Folder Route", () => {
     return res;
   };
 
+  const deleteFolder = async (id: string) => {
+    const res = await request(app)
+      .delete(`${route}/${id}`)
+      .set("Cookie", [`authentication=${token}`]);
+
+    return res;
+  }
+
   describe("Create Folder", () => {
     afterEach(async () => {
       await prisma.folder.deleteMany({});
@@ -195,4 +203,33 @@ describe("Folder Route", () => {
       expect(folderOnDatabase?.name).toBe(data.name);
     });
   });
+
+  describe("Delete folder", () => {
+    let folder: Folder;
+
+    beforeAll(async () => {
+      const data = { userId: user.id, name: "folder 01" };
+      const res = await createFolder(data);
+      folder = res.body;
+    });
+
+    afterAll(async () => {
+      await prisma.folder.deleteMany();
+    });
+
+    it("Should fail if folder does not exist", async () => {
+      const res = await deleteFolder("123");
+
+      expect(res.body.error).toStrictEqual(FOLDER_ERRORS.notFound);
+    })
+
+    it("Should delete a folder", async () => {
+      const res = await deleteFolder(folder.id);
+      const folders = await prisma.folder.findMany();
+      
+      expect(res.status).toBe(200);
+      expect(res.body).toStrictEqual({ folderId: folder.id, message: "Folder deleted."});
+      expect(folders).toHaveLength(0);
+    })
+  })
 });
