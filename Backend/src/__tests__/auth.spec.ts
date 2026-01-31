@@ -89,7 +89,7 @@ describe("Auth Service", () => {
       const res = await login({ email: user.email, password: user.password });
 
       expect(res.status).toBe(200);
-      expect(res.body.success).toBe(true);
+      expect(res.body.id).toBeDefined();
     });
   });
 });

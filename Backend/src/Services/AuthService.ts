@@ -13,8 +13,9 @@ export class AuthService {
     const isValidPassword = await verifyPassword(password, user.password);
     if (!isValidPassword) throw new CustomError(AUTH_ERRORS.invalidCredentials);
 
+    const { password: _, ...userWithoutPassword } = user;
     const token = generateToken(user.id);
 
-    return token;
+    return { user: userWithoutPassword, token };
   }
 }
