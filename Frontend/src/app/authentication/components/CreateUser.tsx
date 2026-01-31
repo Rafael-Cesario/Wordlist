@@ -37,6 +37,8 @@ export const CreateUser = () => {
       type: "success",
       open: true,
     });
+
+    setUser(defaultUser);
   };
 
   const changeValue = (field: keyof typeof defaultUser, newValue: string) => {
