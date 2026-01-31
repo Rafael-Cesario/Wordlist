@@ -1,27 +1,17 @@
-import axios, { AxiosError } from "axios";
+import axios from "axios";
 import { CreateUser } from "@/interfaces/userInterface";
 import { USER_ERRORS } from "./errors/userErrors";
+import { handleAxiosError } from "./utils/handleAxiosErrors";
 
 class UserRequests {
   private URL = `${process.env.NEXT_PUBLIC_URL}/user`;
-
-  private handleAxiosError(error: unknown) {
-    if (error instanceof AxiosError) {
-      const responseError = error.response?.data?.error;
-      const errorCode = responseError.split(":")[0];
-      const message = USER_ERRORS[errorCode as keyof typeof USER_ERRORS];
-      return message;
-    }
-
-    return USER_ERRORS.default;
-  }
 
   async create(user: CreateUser) {
     try {
       const { data } = await axios.post(this.URL, user);
       return { data };
     } catch (error) {
-      return { error: this.handleAxiosError(error) };
+      return { error: handleAxiosError(error, USER_ERRORS) };
     }
   }
 }
