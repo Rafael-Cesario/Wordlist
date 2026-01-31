@@ -33,12 +33,14 @@ export const Login = () => {
 
     setErrors(defaultUser);
 
-    const { error } = await authRequests.login(user);
+    const { data, error } = await authRequests.login(user);
 
     if (error) {
       setNotification({ type: "error", open: true, message: error });
       return;
     }
+
+    localStorage.setItem("user", JSON.stringify(data));
 
     router.push("/home");
   };
