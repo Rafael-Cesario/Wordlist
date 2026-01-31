@@ -6,7 +6,7 @@ import { validateFields } from "../utils/ValidateFields";
 import { userRequests } from "@/requests/UserRequests";
 import { TextInput } from "./TextInput";
 import { PasswordInput } from "./PasswordInput";
-import { INotification } from "@/app/page";
+import { INotification } from "./Notification";
 import { Notification } from "./Notification";
 
 export const CreateUser = () => {

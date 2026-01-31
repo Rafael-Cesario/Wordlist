@@ -4,12 +4,6 @@ import { useState } from "react";
 import { CreateUser } from "./components/CreateUser";
 import { Login } from "./components/Login";
 
-export interface INotification {
-  type: "error" | "success";
-  message: string;
-  open: boolean;
-}
-
 export default function Authentication() {
   const [activeForm, setActiveForm] = useState<"login" | "create">("login");
 

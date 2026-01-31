@@ -7,7 +7,7 @@ import { PasswordInput } from "./PasswordInput";
 import { validateFields } from "../utils/ValidateFields";
 import { authRequests } from "@/requests/AuthRequests";
 import { Notification } from "./Notification";
-import { INotification } from "@/app/page";
+import { INotification } from "./Notification";
 import { useRouter } from "next/navigation";
 
 export const Login = () => {

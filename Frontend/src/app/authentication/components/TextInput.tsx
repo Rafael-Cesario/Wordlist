@@ -22,6 +22,7 @@ export const TextInput = ({ props: { title, error, fieldName, value, changeValue
         id={fieldName}
         placeholder={title}
         onChange={(e) => changeValue(e.target.value)}
+        autoComplete="off"
       />
 
       <p className="text-red px-4 mt-1 h-1">{error}</p>

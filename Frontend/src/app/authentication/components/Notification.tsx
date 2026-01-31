@@ -1,6 +1,10 @@
 "use client";
 
-import { INotification } from "@/app/page";
+export interface INotification {
+  type: "error" | "success";
+  message: string;
+  open: boolean;
+}
 
 interface NotifcationProps {
   props: {
