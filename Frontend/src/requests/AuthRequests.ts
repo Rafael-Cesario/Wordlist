@@ -14,6 +14,15 @@ class AuthRequests {
       return { error: handleAxiosError(error, AUTH_ERRORS) };
     }
   }
+
+  async validateToken(token: string) {
+    try {
+      const { data } = await axios.post(this.URL + "/validate", { token }, { withCredentials: true });
+      return { data };
+    } catch (error) {
+      return { error: handleAxiosError(error, AUTH_ERRORS) };
+    }
+  }
 }
 
 export const authRequests = new AuthRequests();
