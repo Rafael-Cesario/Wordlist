@@ -3,6 +3,8 @@ import type { Request, Response } from "express";
 import type { AuthService } from "../Services/AuthService";
 import z from "zod";
 import { EXPIRES_IN } from "../helpers/token";
+import { CustomError } from "../helpers/CustomError";
+import { AUTH_ERRORS } from "../helpers/errors/authErrors";
 
 export class AuthController {
   constructor(private authService: AuthService) {}
@@ -24,5 +26,13 @@ export class AuthController {
     });
 
     res.status(200).json(login.user);
+  }
+
+  async validateToken(req: Request, res: Response) {
+    const token = req.body.token;
+    if (!token) throw new CustomError(AUTH_ERRORS.tokenNotFound);
+
+    await this.authService.validateToken(token);
+    res.status(200).json({ message: "Authorized" });
   }
 }

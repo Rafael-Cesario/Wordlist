@@ -4,17 +4,27 @@ import { app } from "../app";
 import { AUTH_ERRORS } from "../helpers/errors/authErrors";
 import { prisma } from "../prisma";
 import { hashPassword } from "../helpers/hashPassword";
-import { validateToken } from "../helpers/token";
+import { generateToken } from "../helpers/token";
 
 describe("Auth Service", () => {
+  const route = "/auth";
+
+  const login = async (data: Partial<Login>) => {
+    const res = await request(app).post(route).send(data);
+
+    return res;
+  };
+
+  const validateToken = async (token: string) => {
+    const res = await request(app)
+      .post(route + "/validate")
+      .send({ token });
+
+    return res;
+  };
+
   describe("Login", () => {
     const user = { email: "user@email.com", name: "user", password: "1234" };
-
-    const login = async (data: Partial<Login>) => {
-      const route = "/auth";
-      const res = await request(app).post(route).send(data);
-      return res;
-    };
 
     beforeAll(async () => {
       const password = await hashPassword(user.password);
@@ -90,6 +100,28 @@ describe("Auth Service", () => {
 
       expect(res.status).toBe(200);
       expect(res.body.id).toBeDefined();
+    });
+  });
+
+  describe("Validate token", () => {
+    it("Should fail if token is not valid", async () => {
+      const invalidToken = `
+        eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.
+        eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsImlhdCI6MTUxNjIzOTAyMn0.
+        KMUFsIDTnFmyG3nMiGM6H9FNFUROf3wh7SmqJp-QV30`;
+
+      const res = await validateToken(invalidToken);
+
+      expect(res.body.error).toStrictEqual(AUTH_ERRORS.invalidSignature);
+    });
+
+    it("Should respond with a authorized message", async () => {
+      const id = "123";
+      const token = generateToken(id);
+
+      const res = await validateToken(token);
+
+      expect(res.body.message).toBe("Authorized");
     });
   });
 });
