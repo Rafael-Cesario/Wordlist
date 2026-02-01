@@ -1,3 +1,17 @@
+"use client";
+
+import { useState } from "react";
+import { FoldersContainer } from "./components/FoldersContainer";
+import { Header } from "./components/Header";
+import { Folder } from "@/requests/interfaces/folderInterface";
+
 export default function Home() {
-  return <h1>Folders Page</h1>;
+  const [folders, setFolders] = useState<Folder[]>([]);
+
+  return (
+    <>
+      <Header props={{ folders, setFolders }} />
+      <FoldersContainer props={{ folders }} />
+    </>
+  );
 }

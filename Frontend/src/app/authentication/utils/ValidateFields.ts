@@ -1,4 +1,4 @@
-import { CreateUser, Login } from "@/interfaces/userInterface";
+import { CreateUser, Login } from "@/requests/interfaces/userInterface";
 
 // from Zod
 const REGEX_EMAIL = /^(?!\.)(?!.*\.\.)([a-z0-9_'+\-\.]*)[a-z0-9_+-]@([a-z0-9][a-z0-9\-]*\.)+[a-z]{2,}$/i;

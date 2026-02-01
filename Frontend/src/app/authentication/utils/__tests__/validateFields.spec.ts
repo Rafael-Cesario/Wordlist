@@ -1,4 +1,4 @@
-import { CreateUser, Login } from "@/interfaces/userInterface";
+import { CreateUser, Login } from "@/requests/interfaces/userInterface";
 import { validateFields } from "../ValidateFields";
 
 describe("Validate Fields", () => {

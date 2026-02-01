@@ -1,5 +1,5 @@
 import axios from "axios";
-import { CreateUser } from "@/interfaces/userInterface";
+import { CreateUser } from "@/requests/interfaces/userInterface";
 import { USER_ERRORS } from "./errors/userErrors";
 import { handleAxiosError } from "./utils/handleAxiosErrors";
 

@@ -1,6 +1,6 @@
 import axios from "axios";
 import { AUTH_ERRORS } from "./errors/authErrors";
-import { Login } from "@/interfaces/userInterface";
+import { Login } from "@/requests/interfaces/userInterface";
 import { handleAxiosError } from "./utils/handleAxiosErrors";
 
 class AuthRequests {
