@@ -39,7 +39,7 @@ export const Header = ({ props: { folders, setFolders, setNotification } }: Head
   };
 
   return (
-    <div className="flex justify-between px-8 py-4 items-start">
+    <div className="flex justify-between p-10 h-[180] items-start">
       <div>
         <h1 className="text-4xl font-bold">Wordlist</h1>
         <p className="text-neutral-500">Crie pastas para organizar suas palavras</p>
@@ -61,7 +61,9 @@ export const Header = ({ props: { folders, setFolders, setNotification } }: Head
               type="text"
             />
 
-            <button className="bg-white text-black px-4" data-testid="createFolderButton">Criar</button>
+            <button className="bg-white text-black px-4" data-testid="createFolderButton">
+              Criar
+            </button>
           </form>
         )}
       </div>
