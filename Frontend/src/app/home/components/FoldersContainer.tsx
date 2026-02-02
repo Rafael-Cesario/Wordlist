@@ -10,7 +10,7 @@ interface FoldersContainerProps {
 
 export const FoldersContainer = ({ props: { folders } }: FoldersContainerProps) => {
   return (
-    <div className="grid grid-cols-5 gap-4 mx-100 my-50">
+    <div className="grid grid-cols-5 gap-4 mx-100 my-50" data-testid="foldersContainer">
       {folders.map((folder) => {
         return (
           <button

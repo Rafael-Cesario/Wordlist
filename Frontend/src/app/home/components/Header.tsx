@@ -53,6 +53,7 @@ export const Header = ({ props: { folders, setFolders, setNotification } }: Head
         {showCreate && (
           <form onSubmit={(e) => (e.preventDefault(), createFolder())} className="flex mt-4">
             <input
+              data-testid="folderNameInput"
               value={name}
               onChange={(e) => setName(e.target.value)}
               autoFocus
@@ -60,7 +61,7 @@ export const Header = ({ props: { folders, setFolders, setNotification } }: Head
               type="text"
             />
 
-            <button className="bg-white text-black px-4">Criar</button>
+            <button className="bg-white text-black px-4" data-testid="createFolderButton">Criar</button>
           </form>
         )}
       </div>

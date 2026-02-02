@@ -27,7 +27,7 @@ export const Notification = ({ props: { notification, setNotification } }: Notif
         data-type={notification.type}
         className={`absolute top-10 w-100 self-center bg-faded px-8 py-4 border-l-2 ${borders[notification.type]}`}
       >
-        <p>{notification.message}</p>
+        <p data-testid="notification-text">{notification.message}</p>
         <button
           className="absolute top-0 right-0 px-4 py-1"
           onClick={() => setNotification({ ...notification, open: false })}
