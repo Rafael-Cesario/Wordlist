@@ -5,15 +5,17 @@ import { CreateFolder, Folder } from "@/requests/interfaces/folderInterface";
 import { User } from "@/requests/interfaces/userInterface";
 import { useState } from "react";
 import { produce } from "immer";
+import { INotification } from "@/components/Notification";
 
 interface HeaderProps {
   props: {
     folders: Folder[];
     setFolders: (state: Folder[]) => void;
+    setNotification: (state: INotification) => void;
   };
 }
 
-export const Header = ({ props: { folders, setFolders } }: HeaderProps) => {
+export const Header = ({ props: { folders, setFolders, setNotification } }: HeaderProps) => {
   const [showCreate, setShowCreate] = useState(false);
   const [name, setName] = useState("");
 
@@ -23,17 +25,17 @@ export const Header = ({ props: { folders, setFolders } }: HeaderProps) => {
     const user: User = JSON.parse(localStorage.getItem("user") || "");
     const folderData: CreateFolder = { userId: user.id, name };
 
-    const { data } = await folderRequests.create(folderData);
+    const { data, error } = await folderRequests.create(folderData);
+
+    if (error) return setNotification({ type: "error", message: error, open: true });
 
     const newState = produce(folders, (draft) => {
       draft.push(data);
     });
 
+    setNotification({ type: "success", message: "Sua nova pasta foi criada", open: true });
     setFolders(newState);
     setName("");
-
-    // Tasks
-    // catch errors
   };
 
   return (

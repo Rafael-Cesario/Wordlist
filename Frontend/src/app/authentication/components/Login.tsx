@@ -6,8 +6,8 @@ import { produce } from "immer";
 import { PasswordInput } from "./PasswordInput";
 import { validateFields } from "../utils/ValidateFields";
 import { authRequests } from "@/requests/AuthRequests";
-import { Notification } from "./Notification";
-import { INotification } from "./Notification";
+import { Notification } from "../../../components/Notification";
+import { INotification } from "../../../components/Notification";
 import { useRouter } from "next/navigation";
 
 export const Login = () => {

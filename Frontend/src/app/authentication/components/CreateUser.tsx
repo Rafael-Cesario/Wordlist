@@ -6,8 +6,8 @@ import { validateFields } from "../utils/ValidateFields";
 import { userRequests } from "@/requests/UserRequests";
 import { TextInput } from "./TextInput";
 import { PasswordInput } from "./PasswordInput";
-import { INotification } from "./Notification";
-import { Notification } from "./Notification";
+import { INotification } from "../../../components/Notification";
+import { Notification } from "../../../components/Notification";
 
 export const CreateUser = () => {
   const defaultUser = { email: "", name: "", password: "", passwordCheck: "" };
