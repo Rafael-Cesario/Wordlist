@@ -1,0 +1,21 @@
+import type { Request, Response } from "express";
+import type { WordService } from "../Services/WordService";
+import z from "zod";
+
+export class WordController {
+  constructor(private wordService: WordService) {}
+
+  async create(req: Request, res: Response) {
+    const WordSchema = z.object({
+      folderId: z.uuid(),
+      word: z.string().min(1),
+      definition: z.string().min(1),
+    });
+
+    const data = WordSchema.parse(req.body);
+
+    const word = await this.wordService.create(data);
+
+    res.status(201).json(word);
+  }
+}
