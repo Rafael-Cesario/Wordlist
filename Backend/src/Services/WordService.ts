@@ -1,7 +1,7 @@
 import { CustomError } from "../helpers/CustomError";
 import { WORD_ERRORS } from "../helpers/errors/wordErrors";
 import { prisma } from "../prisma";
-import type { CreateWord } from "../interfaces/wordInterface";
+import type { CreateWord, UpdateWord } from "../interfaces/wordInterface";
 
 export class WordService {
   async create(data: CreateWord) {
@@ -18,5 +18,17 @@ export class WordService {
 
     const words = await prisma.word.findMany({ where: { folderId } });
     return words;
+  }
+
+  async update(data: UpdateWord) {
+    const hasWord = await prisma.word.findUnique({ where: { id: data.id } });
+    if (!hasWord) throw new CustomError(WORD_ERRORS.notFound);
+
+    const word = await prisma.word.update({
+      where: { id: data.id },
+      data,
+    });
+
+    return word;
   }
 }

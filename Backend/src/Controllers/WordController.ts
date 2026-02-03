@@ -26,4 +26,19 @@ export class WordController {
 
     res.status(200).json({ folderId, totalWords: words.length, words });
   }
+
+  async update(req: Request, res: Response) {
+    const WordSchema = z.object({
+      id: z.uuid(),
+      folderId: z.uuid(),
+      word: z.string().min(1),
+      definition: z.string().min(1),
+    });
+
+    const data = WordSchema.parse(req.body);
+
+    const word = await this.wordService.update(data);
+
+    res.status(200).json(word);
+  }
 }

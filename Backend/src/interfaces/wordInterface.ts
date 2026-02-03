@@ -10,3 +10,10 @@ export interface CreateWord {
   word: string;
   definition: string;
 }
+
+export interface UpdateWord {
+  id: string;
+  folderId: string;
+  word: string;
+  definition: string;
+}
