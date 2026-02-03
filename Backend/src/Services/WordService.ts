@@ -11,4 +11,12 @@ export class WordService {
     const word = await prisma.word.create({ data });
     return word;
   }
+
+  async readAll(folderId: string) {
+    const hasFolder = await prisma.folder.findUnique({ where: { id: folderId } });
+    if (!hasFolder) throw new CustomError(WORD_ERRORS.folderNotFound);
+
+    const words = await prisma.word.findMany({ where: { folderId } });
+    return words;
+  }
 }

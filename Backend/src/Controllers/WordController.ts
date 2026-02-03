@@ -18,4 +18,12 @@ export class WordController {
 
     res.status(201).json(word);
   }
+
+  async readAll(req: Request, res: Response) {
+    const folderId = `${req.params.folderId}`;
+
+    const words = await this.wordService.readAll(folderId);
+
+    res.status(200).json({ folderId, totalWords: words.length, words });
+  }
 }
