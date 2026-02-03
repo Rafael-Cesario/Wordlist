@@ -4,10 +4,11 @@ import { app } from "../app";
 import { AUTH_ERRORS } from "../helpers/errors/authErrors";
 import { WORD_ERRORS } from "../helpers/errors/wordErrors";
 import { createFolder, createUser, resetDatabase } from "./utils/database";
-import { createWord } from "./utils/requests";
+import { createWord, readAllWords } from "./utils/requests";
 import type { CreateWord } from "../interfaces/wordInterface";
 import type { Folder } from "../interfaces/folderInterface";
 import type { User } from "../interfaces/userInterface";
+import { prisma } from "../prisma";
 
 describe("Word", () => {
   let user: User;
@@ -51,6 +52,10 @@ describe("Word", () => {
   });
 
   describe("Create Word", () => {
+    afterAll(async () => {
+      await prisma.word.deleteMany();
+    })
+
     it("Should fail if body is invalid", async () => {
       const data: CreateWord = { folderId: "1", word: "", definition: "" };
 
@@ -88,5 +93,33 @@ describe("Word", () => {
     });
   });
 
-  // describe("Read all words", () => {});
+  describe("Read all words", () => {
+    beforeAll(async () => {
+      const data: CreateWord = {
+        folderId: folder.id,
+        word: faker.word.words(),
+        definition: faker.word.words(),
+      };
+
+      await createWord(data);
+    });
+
+    afterAll(async () => {
+      await resetDatabase();
+    });
+
+    it("Should fail if folder does not exist", async () => {
+      const response = await readAllWords(faker.string.uuid());
+
+      expect(response.body.error).toStrictEqual(WORD_ERRORS.folderNotFound);
+    });
+
+    it("Should read one word", async () => {
+      const response = await readAllWords(folder.id);
+
+      expect(response.body.folderId).toBe(folder.id);
+      expect(response.body.totalWords).toBe(1);
+      expect(response.body.words).toHaveLength(1);
+    });
+  });
 });
