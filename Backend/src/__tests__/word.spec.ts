@@ -1,80 +1,56 @@
 import request from "supertest";
 import { faker } from "@faker-js/faker";
-import { generateToken } from "../helpers/token";
 import { app } from "../app";
 import { AUTH_ERRORS } from "../helpers/errors/authErrors";
 import { WORD_ERRORS } from "../helpers/errors/wordErrors";
-import { prisma } from "../prisma";
+import { createFolder, createUser, resetDatabase } from "./utils/database";
+import { createWord } from "./utils/requests";
 import type { CreateWord } from "../interfaces/wordInterface";
 import type { Folder } from "../interfaces/folderInterface";
 import type { User } from "../interfaces/userInterface";
 
 describe("Word", () => {
-  const route = "/word";
-  const token = generateToken(faker.string.uuid());
+  let user: User;
+  let folder: Folder;
 
-  const createWord = async (data: Partial<CreateWord>) => {
-    const response = await request(app)
-      .post(route)
-      .set("Cookie", [`authentication=${token}`])
-      .send(data);
+  beforeAll(async () => {
+    user = await createUser();
+    folder = await createFolder(user);
+  });
 
-    return response;
-  };
+  afterAll(async () => {
+    await resetDatabase();
+  });
 
-  const createUser = async () => {
-    return await prisma.user.create({
-      data: {
-        email: faker.internet.email(),
-        name: faker.internet.username(),
-        password: faker.internet.password(),
-      },
-    });
-  };
-
-  const createFolder = async (user: User) => {
-    return await prisma.folder.create({
-      data: {
-        name: faker.lorem.word(),
-        userId: user.id,
-      },
-    });
-  };
-
-  const resetDatabase = async () => {
-    await prisma.user.deleteMany();
-  };
-
-  describe("Create Word", () => {
-    let user: User;
-    let folder: Folder;
-
-    beforeAll(async () => {
-      user = await createUser();
-      folder = await createFolder(user);
-    });
-
-    afterAll(async () => {
-      await resetDatabase();
-    });
+  describe("Protected routes", () => {
+    const route = "/word";
 
     it("Should fail if user is not authenticated", async () => {
-      const response = await request(app).post(route).send({});
+      const create = await request(app).post(route).send({});
+      const read = await request(app).get(`${route}/${faker.string.uuid()}`);
 
-      expect(response.body.error).toStrictEqual(AUTH_ERRORS.cookiesNotFound);
+      expect(create.body.error).toStrictEqual(AUTH_ERRORS.cookiesNotFound);
+      expect(read.body.error).toStrictEqual(AUTH_ERRORS.cookiesNotFound);
     });
 
     it("Should fail if token is not valid", async () => {
       const invalidToken = faker.internet.jwt();
 
-      const response = await request(app)
+      const create = await request(app)
         .post(route)
         .set("Cookie", [`authentication=${invalidToken}`])
         .send({});
 
-      expect(response.body.error).toStrictEqual(AUTH_ERRORS.invalidSignature);
-    });
+      const read = await request(app)
+        .post(`${route}/${faker.string.uuid()}`)
+        .set("Cookie", [`authentication=${invalidToken}`]);
 
+      expect(create.body.error).toStrictEqual(AUTH_ERRORS.invalidSignature);
+      expect(read.body.error).toStrictEqual(AUTH_ERRORS.invalidSignature);
+    });
+  });
+
+  describe("Create Word", () => {
     it("Should fail if body is invalid", async () => {
       const data: CreateWord = { folderId: "1", word: "", definition: "" };
 
@@ -111,4 +87,6 @@ describe("Word", () => {
       expect(response.body).toMatchObject({ id: expect.any(String), ...data });
     });
   });
+
+  // describe("Read all words", () => {});
 });
