@@ -4,7 +4,7 @@ import { app } from "../app";
 import { AUTH_ERRORS } from "../helpers/errors/authErrors";
 import { WORD_ERRORS } from "../helpers/errors/wordErrors";
 import { createFolder, createUser, resetDatabase } from "./utils/database";
-import { createWord, readAllWords, updateWord } from "./utils/requests";
+import { createWord, deleteWord, readAllWords, updateWord } from "./utils/requests";
 import { prisma } from "../prisma";
 import type { CreateWord, UpdateWord } from "../interfaces/wordInterface";
 import type { Folder } from "../interfaces/folderInterface";
@@ -124,6 +124,10 @@ describe("Word", () => {
   });
 
   describe("Update word", () => {
+    afterAll(async () => {
+      await prisma.word.deleteMany();
+    });
+
     it("Should fail if body is invalid", async () => {
       const data: UpdateWord = { id: "1", folderId: "1", word: "", definition: "" };
 
@@ -168,6 +172,34 @@ describe("Word", () => {
 
       expect(response.body.word).toBe("new Word");
       expect(response.body.definition).toBe("new Definition");
+    });
+  });
+
+  describe("Delete word", () => {
+    afterAll(async () => {
+      await prisma.word.deleteMany();
+    });
+
+    it("Should fail if word is not found", async () => {
+      const response = await deleteWord("1");
+
+      expect(response.body.error).toStrictEqual(WORD_ERRORS.notFound);
+    });
+
+    it("Should delete a word", async () => {
+      let response = await createWord({
+        folderId: folder.id,
+        word: "someWord",
+        definition: "someDefinition",
+      });
+
+      const word = response.body;
+
+      response = await deleteWord(word.id);
+      const wordsOnDatabase = await prisma.word.findMany();
+
+      expect(wordsOnDatabase).toHaveLength(0);
+      expect(response.body).toStrictEqual({ id: word.id, message: "Word deleted" });
     });
   });
 });

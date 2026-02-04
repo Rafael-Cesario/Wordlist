@@ -26,9 +26,17 @@ export const readAllWords = async (folderId: string) => {
 
 export const updateWord = async (data: Partial<UpdateWord>) => {
   const response = await request(app)
-    .put("/word")
+    .put(route)
     .set("Cookie", [`authentication=${token}`])
     .send(data);
+
+  return response;
+};
+
+export const deleteWord = async (id: string) => {
+  const response = await request(app)
+    .delete(`${route}/${id}`)
+    .set("Cookie", [`authentication=${token}`]);
 
   return response;
 };
