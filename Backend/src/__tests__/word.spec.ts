@@ -4,11 +4,11 @@ import { app } from "../app";
 import { AUTH_ERRORS } from "../helpers/errors/authErrors";
 import { WORD_ERRORS } from "../helpers/errors/wordErrors";
 import { createFolder, createUser, resetDatabase } from "./utils/database";
-import { createWord, readAllWords } from "./utils/requests";
-import type { CreateWord } from "../interfaces/wordInterface";
+import { createWord, readAllWords, updateWord } from "./utils/requests";
+import { prisma } from "../prisma";
+import type { CreateWord, UpdateWord } from "../interfaces/wordInterface";
 import type { Folder } from "../interfaces/folderInterface";
 import type { User } from "../interfaces/userInterface";
-import { prisma } from "../prisma";
 
 describe("Word", () => {
   let user: User;
@@ -54,7 +54,7 @@ describe("Word", () => {
   describe("Create Word", () => {
     afterAll(async () => {
       await prisma.word.deleteMany();
-    })
+    });
 
     it("Should fail if body is invalid", async () => {
       const data: CreateWord = { folderId: "1", word: "", definition: "" };
@@ -105,7 +105,7 @@ describe("Word", () => {
     });
 
     afterAll(async () => {
-      await resetDatabase();
+      await prisma.word.deleteMany();
     });
 
     it("Should fail if folder does not exist", async () => {
@@ -120,6 +120,54 @@ describe("Word", () => {
       expect(response.body.folderId).toBe(folder.id);
       expect(response.body.totalWords).toBe(1);
       expect(response.body.words).toHaveLength(1);
+    });
+  });
+
+  describe("Update word", () => {
+    it("Should fail if body is invalid", async () => {
+      const data: UpdateWord = { id: "1", folderId: "1", word: "", definition: "" };
+
+      const response = await updateWord(data);
+
+      expect(response.body).toStrictEqual({
+        id: ["Invalid UUID"],
+        folderId: ["Invalid UUID"],
+        word: ["Too small: expected string to have >=1 characters"],
+        definition: ["Too small: expected string to have >=1 characters"],
+      });
+    });
+
+    it("Should fail if word is not found", async () => {
+      const data: UpdateWord = {
+        id: faker.string.uuid(),
+        folderId: faker.string.uuid(),
+        word: "new Word",
+        definition: "new definition",
+      };
+
+      const response = await updateWord(data);
+
+      expect(response.body.error).toStrictEqual(WORD_ERRORS.notFound);
+    });
+
+    it("Should update a word", async () => {
+      let response = await createWord({
+        folderId: folder.id,
+        word: "someWord",
+        definition: "someDefinition",
+      });
+
+      const word = response.body;
+
+      response = await updateWord({
+        id: word.id,
+        folderId: word.folderId,
+        word: "new Word",
+        definition: "new Definition",
+      });
+
+      expect(response.body.word).toBe("new Word");
+      expect(response.body.definition).toBe("new Definition");
     });
   });
 });
