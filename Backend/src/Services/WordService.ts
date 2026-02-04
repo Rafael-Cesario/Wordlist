@@ -31,4 +31,11 @@ export class WordService {
 
     return word;
   }
+
+  async delete(id: string) {
+    const hasWord = await prisma.word.findUnique({ where: { id } });
+    if (!hasWord) throw new CustomError(WORD_ERRORS.notFound);
+
+    await prisma.word.delete({ where: { id } });
+  }
 }

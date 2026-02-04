@@ -41,4 +41,12 @@ export class WordController {
 
     res.status(200).json(word);
   }
+
+  async delete(req: Request, res: Response) {
+    const id = `${req.params.id}`;
+
+    await this.wordService.delete(id);
+
+    res.status(200).json({ id, message: "Word deleted" });
+  }
 }

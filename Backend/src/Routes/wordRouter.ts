@@ -9,5 +9,6 @@ const router = Router();
 router.post("/", (req, res) => wordController.create(req, res));
 router.get("/:folderId", (req, res) => wordController.readAll(req, res));
 router.put("/", (req, res) => wordController.update(req, res));
+router.delete("/:id", (req, res) => wordController.delete(req, res));
 
 export { router as wordRouter };
