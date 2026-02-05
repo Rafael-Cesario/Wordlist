@@ -11,7 +11,7 @@ interface HeaderProps {
 
 export const Header = ({ props: { folder, words } }: HeaderProps) => {
   return (
-    <div className="grid grid-cols-3 my-4 mx-8 items-center h-15">
+    <div className="grid grid-cols-3 mt-10 mx-8 h-15">
       <div>
         <Link className="mr-4" href={"/home"}>
           Voltar

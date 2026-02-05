@@ -5,8 +5,9 @@ import { Header } from "./components/Header";
 import { FOLDER_KEY } from "@/utils/storageKeys";
 import { wordRequests } from "@/requests/wordRequests";
 import { Word } from "@/requests/interfaces/wordInterface";
-import type { Folder } from "@/requests/interfaces/folderInterface";
 import { CreateWord } from "./components/CreateWord";
+import { WordsContainer } from "./components/WordsContainer";
+import type { Folder } from "@/requests/interfaces/folderInterface";
 
 export default function Folder() {
   const [folder, setFolder] = useState<Folder>({ id: "", name: "", userId: "" });
@@ -30,6 +31,7 @@ export default function Folder() {
     <>
       <Header props={{ folder, words }} />
       <CreateWord props={{ words, setWords, folder }} />
+      <WordsContainer props={{ words }} />
     </>
   );
 }
