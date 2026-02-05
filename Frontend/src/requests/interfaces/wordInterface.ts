@@ -4,3 +4,9 @@ export interface Word {
   word: string;
   definition: string;
 }
+
+export interface ICreateWord {
+  folderId: string;
+  word: string;
+  definition: string;
+}
